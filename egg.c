@@ -18,6 +18,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifdef NEED_STRTONUM
+extern long long strtonum(const char *, long long, long long, const char **);
+#endif
+
 static void 	usage(void);
 static void 	version(void);
 
@@ -113,15 +117,15 @@ main(int argc, char *argv[])
 	/* Remove the watch. Only needed for eight character watch.  */
 	if (o >= 3600)
 		printf("\r        ");
-	putchar('\r');
+	fputc('\r', stdout);
 
 	for (t = 0; t < b; t++) {
 		printf("Beep!\a");
 		sleep(1);
 		if ((t + 1) < b)
-			putchar(' ');
+			fputc(' ', stdout);
 	}
-	putchar('\n');
+	fputc('\n', stdout);
 
 	return 0;
 }
@@ -137,7 +141,7 @@ usage(void)
 static void
 version(void)
 {
-	const char v[] = "egg version 1\nCopyright (c) 2014 Brian Callahan <bcallah@openbsd.org>\n\nPermission to use, copy, modify, and distribute this software for any\npurpose with or without fee is hereby granted, provided that the above\ncopyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES\nWITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF\nMERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR\nANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES\nWHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN\nACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF\nOR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.\n";
+	const char v[] = "egg version 2\nCopyright (c) 2014 Brian Callahan <bcallah@openbsd.org>\n\nPermission to use, copy, modify, and distribute this software for any\npurpose with or without fee is hereby granted, provided that the above\ncopyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES\nWITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF\nMERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR\nANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES\nWHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN\nACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF\nOR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.\n";
 
 	(void) fprintf(stderr, v);
 	exit(1);

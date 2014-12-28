@@ -2,14 +2,18 @@
 
 # OpenBSD defaults
 CC ?= cc
-CFLAGS = -O2 -pipe -Wall -Wextra
+CFLAGS ?= -O2 -pipe
 PREFIX ?= /usr/local
 
-all: egg
+CFLAGS +=
+OBJS = egg.o
+
+all: ${OBJS}
+	${CC} ${CFLAGS}  -o egg ${OBJS}
 
 install: all
 	install -c -S -s  -o root -g bin  -m 555 egg ${PREFIX}/bin
 	install -c -S  -o root -g bin  -m 444 egg.1 ${PREFIX}/man/man1
 
 clean:
-	rm -rf egg *.o *~ *.core
+	rm -f Makefile egg *.o *~ *.core
