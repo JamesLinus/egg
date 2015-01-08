@@ -6,10 +6,10 @@ I needed an egg timer. So I wrote one. Then I overengineered it. The end.
 
 To build:
 
-    ./configure
-    make
-    make install
+    $ ./configure
+    $ make
+    # make install
 
-Get a tarball: http://devio.us/~bcallah/egg-2.tar.gz
+Get a tarball: http://devio.us/~bcallah/egg-3.tar.gz
 
 ISC license. See LICENSE for a copy.

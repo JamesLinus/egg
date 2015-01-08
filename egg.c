@@ -52,8 +52,10 @@ main(int argc, char *argv[])
 		case 's':
 			t += strtonum(optarg, 1, 86400, &e);
 			break;
-		case 't':	/* Absolute time, in seconds. Takes
-				 * precedence.  */
+		case 't':	/*
+				 * Absolute time, in seconds.
+				 * Takes precedence.
+				 */
 			z = strtonum(optarg, 1, 86400, &e);
 			break;
 		case 'v':
@@ -74,15 +76,21 @@ main(int argc, char *argv[])
 	if (z > 0)
 		t = z;
 
-	if (b < 1 || b > 100)
+	if (b < 1 || b > 100) {
+		fprintf(stderr, "Setting beeps to 3.\n");
 		b = 3;
+	}
 
-	if (d < 1 || d > 86400)
+	if (d < 1 || d > 86400) {
+		fprintf(stderr, "Setting update interval to 1 second.\n");
 		d = 1;
+	}
 
         /* If you didn't set the time or there's an error set to 15 minutes.  */
-	if (t < 1 || t > 86400)
+	if (t < 1 || t > 86400) {
+		fprintf(stderr, "Setting time to 15 minutes.\n");
 		t = 900;
+	}
 
 	/* No need for fflush() everywhere.  */
 	setbuf(stdout, NULL);
@@ -91,7 +99,7 @@ main(int argc, char *argv[])
 	o = t;
 	p = d;
 
-	while (t > 0) {
+	do {
 		if (p == d) {
 			p = 0;
 			if (t >= 3600)
@@ -111,20 +119,17 @@ main(int argc, char *argv[])
 
 		sleep(1);
 		p++;
-		t--;
-	}
+	} while (--t > 0);
 
-	/* Remove the watch. Only needed for eight character watch.  */
-	if (o >= 3600)
-		printf("\r        ");
-	fputc('\r', stdout);
+	/* Remove the watch. Only strictly needed for eight character watch.  */
+	printf("\r        \r");
 
-	for (t = 0; t < b; t++) {
+	do {
 		printf("Beep!\a");
 		sleep(1);
-		if ((t + 1) < b)
+		if (--b > 0)
 			fputc(' ', stdout);
-	}
+	} while (b > 0);
 	fputc('\n', stdout);
 
 	return 0;
@@ -141,7 +146,7 @@ usage(void)
 static void
 version(void)
 {
-	const char v[] = "egg version 2\nCopyright (c) 2014 Brian Callahan <bcallah@openbsd.org>\n\nPermission to use, copy, modify, and distribute this software for any\npurpose with or without fee is hereby granted, provided that the above\ncopyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES\nWITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF\nMERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR\nANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES\nWHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN\nACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF\nOR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.\n";
+	const char v[] = "egg version 3\nCopyright (c) 2014 Brian Callahan <bcallah@openbsd.org>\n\nPermission to use, copy, modify, and distribute this software for any\npurpose with or without fee is hereby granted, provided that the above\ncopyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES\nWITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF\nMERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR\nANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES\nWHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN\nACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF\nOR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.\n";
 
 	(void) fprintf(stderr, v);
 	exit(1);

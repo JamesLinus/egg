@@ -1,10 +1,10 @@
 #!/bin/sh
 
 printf "checking for strtonum... "
-if grep strtonum /usr/lib/libc.* >/dev/null 2>&1 && printf "yes\n" ; then
+if grep strtonum /usr/lib/libc.* >/dev/null 2>&1 && echo "yes" ; then
 	cp Makefile.in Makefile
 else
-	printf "no\n"
+	echo "no"
 	sed 's,CFLAGS +=,CFLAGS += -DNEED_STRTONUM,g' Makefile.in > Makefile.tmp
 	sed 's,egg.o,egg.o strtonum.o,g' Makefile.tmp > Makefile
 	rm Makefile.tmp
